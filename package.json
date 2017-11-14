@@ -1,0 +1,27 @@
+{
+  "name": "@steemit/rpc-auth",
+  "version": "1.0.0",
+  "license": "MIT",
+  "main": "./lib/index",
+  "typings": "./lib/index",
+  "scripts": {
+    "test": "make ci-test",
+    "build": "make lib"
+  },
+  "engines": {
+    "node": "^8"
+  },
+  "dependencies": {
+    "dsteem": "^0.8.5"
+  },
+  "devDependencies": {
+    "@types/mocha": "^2.2.41",
+    "@types/node": "^8.0.26",
+    "mocha": "^4.0.1",
+    "nsp": "^2.8.0",
+    "nyc": "^11.1.0",
+    "ts-node": "^3.3.0",
+    "tslint": "^5.7.0",
+    "typescript": "^2.5.0"
+  }
+}
