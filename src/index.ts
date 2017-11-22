@@ -3,17 +3,23 @@
  * @author Johan Nordberg <johan@steemit.com>
  */
 
+import {createHash, randomBytes} from 'crypto'
 import {PrivateKey, Signature} from 'dsteem'
-import {randomBytes, createHash} from 'crypto'
 
 /**
  * Signing constant used to reserve opcode space and prevent cross-protocol attacks.
- * Output of `sha256('steem_jsonrpc_auth')`
+ * Output of `sha256('steem_jsonrpc_auth')`.
  */
 export const K = Buffer.from('3b3b081e46ea808d5a96b08c4bc5003f5e15767090f344faab531ec57565136b', 'hex')
 
+/**
+ * JSONRPC 2.0 ID.
+ */
 export type JsonRpcId = string | number | null
 
+/**
+ * JSONRPC 2.0 Request.
+ */
 export interface JsonRpcRequest {
     jsonrpc: '2.0'
     id: JsonRpcId
@@ -21,6 +27,9 @@ export interface JsonRpcRequest {
     params?: any
 }
 
+/**
+ * Signed JSONRPC 2.0 Request.
+ */
 export interface SignedJsonRpcRequest extends JsonRpcRequest {
     params: {
         __signed: {
@@ -38,22 +47,40 @@ export interface SignedJsonRpcRequest extends JsonRpcRequest {
     }
 }
 
+/**
+ * Thrown when a request fails validation.
+ */
 class ValidationError extends Error {
-    cause?: Error
+
+    /** Underlying error. */
+    public cause?: Error
+
     constructor(message: string, cause?: Error) {
         super(message)
         this.name = 'ValidationError'
         this.cause = cause
     }
+
+    public toString() {
+        let str = `ValidationError: ${ this.message }`
+        if (this.cause) {
+            str += ` (${ this.cause.message })`
+        }
+        return str
+    }
+
 }
 
 /**
- * Return message to be signed or validated.
- * @param timestamp  ISO8601 formatted date e.g. `2017-11-14T19:40:29.077Z`
- * @param account    Steem account name that is the signer
- * @param method     RPC request method
- * @param params     Base64 encoded JSON string containing request params
- * @param nonce      8 bytes of random data
+ * Create request hash to be signed.
+ *
+ * @param timestamp  ISO8601 formatted date e.g. `2017-11-14T19:40:29.077Z`.
+ * @param account    Steem account name that is the signer.
+ * @param method     RPC request method.
+ * @param params     Base64 encoded JSON string containing request params.
+ * @param nonce      8 bytes of random data.
+ *
+ * @returns bytes to be signed or validated.
  */
 function hashMessage(timestamp: string, account: string, method: string,
                      params: string, nonce: Buffer): Buffer {
@@ -73,14 +100,13 @@ function hashMessage(timestamp: string, account: string, method: string,
 
 /**
  * Sign a JSON RPC Request.
- **/
+ */
 export function sign(request: JsonRpcRequest, account: string, keys: PrivateKey[]): SignedJsonRpcRequest {
-    let params = ''
-    if (request.params) {
-        const paramsJson = JSON.stringify(request.params)
-        params = Buffer.from(paramsJson, 'utf8').toString('base64')
+    if (!request.params) {
+        throw new Error('Unable to sign a request without params')
     }
 
+    const params = Buffer.from(JSON.stringify(request.params), 'utf8').toString('base64')
     const nonceBytes = randomBytes(8)
     const nonce = nonceBytes.toString('hex')
     const timestamp = new Date().toISOString()
@@ -112,9 +138,28 @@ export function sign(request: JsonRpcRequest, account: string, keys: PrivateKey[
 }
 
 /**
+ * Verify that message is signed by account and that the signatures are valid, should throw if verification fails.
+ *
+ * @param message     Message to verify.
+ * @param signatures  Signatures to verify.
+ * @param account     Account whose posting authority created the signatures.
+ *
+ * Responsible for:
+ *   1. Account must be a valid steem blockchain account
+ *   2. All signatures must be a hex string >= 64 chars (32+ bytes decoded)
+ *   3. Signature matches message
+ *   4. Signature was made with accounts posting authority
+ *
+ */
+export type VerifyMessage = (message: Buffer, signatures: string[], account: string) => Promise<void>
+
+/**
  * Validate a signed JSON RPC request.
- **/
-export function validate(request: SignedJsonRpcRequest) {
+ * Throws a {@link ValidationError} if the request fails validation.
+ *
+ * @returns Resolved request params.
+ */
+export async function validate(request: SignedJsonRpcRequest, verify: VerifyMessage): Promise<any> {
 
     if (request.jsonrpc !== '2.0' || typeof request.method !== 'string') {
         throw new ValidationError('Invalid JSON RPC Request')
@@ -125,6 +170,10 @@ export function validate(request: SignedJsonRpcRequest) {
     }
 
     const signed = request.params.__signed
+
+    if (signed.account == undefined) {
+        throw new ValidationError('Missing account')
+    }
 
     let params: string
     try {
@@ -155,8 +204,11 @@ export function validate(request: SignedJsonRpcRequest) {
         signed.timestamp, signed.account, request.method, signed.params, nonce
     )
 
-    // TODO: validated by steemd
-    // username must be a valid steem blockchain username
-    // signature must be a hex string >= 64 chars (32+ bytes decoded)
-    // signature matches message
+    try {
+        await verify(message, signed.signatures, signed.account)
+    } catch (cause) {
+        throw new ValidationError('Verification failed', cause)
+    }
+
+    return params
 }
