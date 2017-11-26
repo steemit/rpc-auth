@@ -163,7 +163,7 @@ describe('rpc auth', function() {
             jsonrpc: '2.0',
             id: 123,
             method: 'foo.bar',
-            params: {bongo: 'bingo'}
+            params: {hello: 'there'}
         }
         const signed = sign(req, testAccount.username, [testKey])
 
@@ -176,7 +176,7 @@ describe('rpc auth', function() {
         error = await assertThrows(async () => {
             await validate(invalid, dsteemVerify)
         })
-        assert.equal('ValidationError: Verification failed (Signature invalid)', String(error))
+        assert.equal(String(error), 'ValidationError: Verification failed (Signature invalid)')
 
         // invalid account
         invalid = utils.copy(signed)
@@ -184,7 +184,7 @@ describe('rpc auth', function() {
         error = await assertThrows(async () => {
             await validate(invalid, dsteemVerify)
         })
-        assert.equal('ValidationError: Verification failed (Signature invalid)', String(error))
+        assert.equal(String(error), 'ValidationError: Verification failed (Signature invalid)')
 
         // invalid account
         invalid = utils.copy(signed)
@@ -192,7 +192,7 @@ describe('rpc auth', function() {
         error = await assertThrows(async () => {
             await validate(invalid, dsteemVerify)
         })
-        assert.equal('ValidationError: Verification failed (Signature invalid)', String(error))
+        assert.equal(String(error), 'ValidationError: Verification failed (Signature invalid)')
 
         // invalid nonce
         invalid = utils.copy(signed)
@@ -200,7 +200,7 @@ describe('rpc auth', function() {
         error = await assertThrows(async () => {
             await validate(invalid, dsteemVerify)
         })
-        assert.equal('ValidationError: Verification failed (Signature invalid)', String(error))
+        assert.equal(String(error), 'ValidationError: Verification failed (Signature invalid)')
 
         // invalid params
         invalid = utils.copy(signed)
@@ -208,7 +208,7 @@ describe('rpc auth', function() {
         error = await assertThrows(async () => {
             await validate(invalid, dsteemVerify)
         })
-        assert.equal('ValidationError: Verification failed (Signature invalid)', String(error))
+        assert.equal(String(error), 'ValidationError: Verification failed (Signature invalid)')
 
         // invalid timestamp
         invalid = utils.copy(signed)
@@ -216,7 +216,7 @@ describe('rpc auth', function() {
         error = await assertThrows(async () => {
             await validate(invalid, dsteemVerify)
         })
-        assert.equal('ValidationError: Verification failed (Signature invalid)', String(error))
+        assert.equal(String(error), 'ValidationError: Verification failed (Signature invalid)')
 
         // invalid signatures (other key)
         invalid = utils.copy(signed)
@@ -226,7 +226,7 @@ describe('rpc auth', function() {
         error = await assertThrows(async () => {
             await validate(invalid, dsteemVerify)
         })
-        assert.equal('ValidationError: Verification failed (Signature invalid)', String(error))
+        assert.equal(String(error), 'ValidationError: Verification failed (Signature invalid)')
 
         // invalid signatures (same key)
         invalid = utils.copy(signed)
@@ -236,7 +236,7 @@ describe('rpc auth', function() {
         error = await assertThrows(async () => {
             await validate(invalid, dsteemVerify)
         })
-        assert.equal('ValidationError: Verification failed (Signature invalid)', String(error))
+        assert.equal(String(error), 'ValidationError: Verification failed (Signature invalid)')
     })
 
     it('handles invalid requests when signing', function() {

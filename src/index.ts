@@ -58,15 +58,10 @@ class ValidationError extends Error {
     constructor(message: string, cause?: Error) {
         super(message)
         this.name = 'ValidationError'
-        this.cause = cause
-    }
-
-    public toString() {
-        let str = `ValidationError: ${ this.message }`
-        if (this.cause) {
-            str += ` (${ this.cause.message })`
+        if (cause) {
+            this.cause = cause
+            this.message += ` (${ cause.message })`
         }
-        return str
     }
 
 }
