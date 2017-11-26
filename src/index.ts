@@ -164,6 +164,10 @@ export async function validate(request: SignedJsonRpcRequest, verify: VerifyMess
         throw new ValidationError('Signed payload missing')
     }
 
+    if (Object.keys(request.params).length !== 1) {
+        throw new ValidationError('Invalid request params')
+    }
+
     const signed = request.params.__signed
 
     if (signed.account == undefined) {
@@ -175,7 +179,7 @@ export async function validate(request: SignedJsonRpcRequest, verify: VerifyMess
         const jsonString = Buffer.from(signed.params, 'base64').toString('utf8')
         params = JSON.parse(jsonString)
     } catch (cause) {
-        throw new ValidationError('Invalid params', cause)
+        throw new ValidationError('Invalid encoded params', cause)
     }
 
     if (signed.nonce == undefined || typeof signed.nonce !== 'string') {

@@ -105,6 +105,13 @@ describe('rpc auth', function() {
         })
         assert.equal('ValidationError: Signed payload missing', String(error))
 
+        req.params = {__signed: {}, other: 'foo'}
+
+        error = await assertThrows(async () => {
+            await validate(req, dummyVerify)
+        })
+        assert.equal('ValidationError: Invalid request params', String(error))
+
         req.params = {__signed: {}}
 
         error = await assertThrows(async () => {
@@ -117,7 +124,7 @@ describe('rpc auth', function() {
         error = await assertThrows(async () => {
             await validate(req, dummyVerify)
         })
-        assert.equal('ValidationError: Invalid params (First argument must be a string, Buffer, ArrayBuffer, Array, or array-like object.)', String(error))
+        assert.equal('ValidationError: Invalid encoded params (First argument must be a string, Buffer, ArrayBuffer, Array, or array-like object.)', String(error))
 
         req.params.__signed.params = Buffer.from(JSON.stringify({foo: 'bar'})).toString('base64')
 
