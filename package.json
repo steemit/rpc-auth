@@ -6,7 +6,7 @@
   "typings": "./lib/index",
   "scripts": {
     "test": "make ci-test",
-    "build": "make lib"
+    "prepublish": "make lib"
   },
   "engines": {
     "node": "^8"
