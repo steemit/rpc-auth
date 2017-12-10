@@ -9,6 +9,9 @@
     "test": "make ci-test",
     "prepublish": "make lib"
   },
+  "files": [
+    "lib/*"
+  ],
   "engines": {
     "node": "^8"
   },
