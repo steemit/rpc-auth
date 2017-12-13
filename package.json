@@ -16,6 +16,7 @@
     "node": "^8"
   },
   "dependencies": {
+    "@steemit/libcrypto": "^1.0.1"
   },
   "devDependencies": {
     "@types/mocha": "^2.2.41",
