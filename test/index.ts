@@ -64,10 +64,10 @@ describe('rpc auth', function() {
     this.slow(5 * 1000)
 
     let testAccount: {username: string, password: string}
-    let testKey: PrivateKey
+    let testKey: string
     before(async function() {
         testAccount = await createTestnetAccount()
-        testKey = PrivateKey.fromLogin(testAccount.username, testAccount.password, 'posting')
+        testKey = PrivateKey.fromLogin(testAccount.username, testAccount.password, 'posting').toString()
     })
 
     it('signs and validates', async function() {
@@ -238,7 +238,7 @@ describe('rpc auth', function() {
         // invalid signatures (same key)
         invalid = utils.copy(signed)
         invalid.params.__signed.signatures = [
-            testKey.sign(randomBytes(32)).toString()
+            PrivateKey.fromString(testKey).sign(randomBytes(32)).toString()
         ]
         error = await assertThrows(async () => {
             await validate(invalid, dsteemVerify)
