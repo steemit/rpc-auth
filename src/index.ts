@@ -3,7 +3,7 @@
  * @author Johan Nordberg <johan@steemit.com>
  */
 
-import {PrivateKey} from '@steemit/libcrypto'
+import {PrivateKey, hexify} from '@steemit/libcrypto'
 import {createHash, randomBytes} from 'crypto'
 
 /**
@@ -115,7 +115,7 @@ export function sign(request: JsonRpcRequest, account: string, keys: any[]): Sig
         if (typeof key === 'string') {
             key = PrivateKey.from(key)
         }
-        const signature = key.sign(message).toString()
+        const signature = hexify(key.sign(message.buffer))
         signatures.push(signature)
     }
 
