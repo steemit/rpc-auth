@@ -16,11 +16,12 @@
     "node": "^8"
   },
   "dependencies": {
-    "dsteem": "^0.8.5"
+    "@steemit/libcrypto": "^1.0.1"
   },
   "devDependencies": {
     "@types/mocha": "^2.2.41",
     "@types/node": "^8.0.26",
+    "dsteem": "^0.8.5",
     "mocha": "^4.0.1",
     "node-fetch": "^1.7.3",
     "nsp": "^2.8.0",

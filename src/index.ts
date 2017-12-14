@@ -3,8 +3,8 @@
  * @author Johan Nordberg <johan@steemit.com>
  */
 
+import {PrivateKey, hexify} from '@steemit/libcrypto'
 import {createHash, randomBytes} from 'crypto'
-import {PrivateKey, Signature} from 'dsteem'
 
 /**
  * Signing constant used to reserve opcode space and prevent cross-protocol attacks.
@@ -96,7 +96,7 @@ function hashMessage(timestamp: string, account: string, method: string,
 /**
  * Sign a JSON RPC Request.
  */
-export function sign(request: JsonRpcRequest, account: string, keys: PrivateKey[]): SignedJsonRpcRequest {
+export function sign(request: JsonRpcRequest, account: string, keys: any[]): SignedJsonRpcRequest {
     if (!request.params) {
         throw new Error('Unable to sign a request without params')
     }
@@ -111,8 +111,11 @@ export function sign(request: JsonRpcRequest, account: string, keys: PrivateKey[
     )
 
     const signatures: string[] = []
-    for (const key of keys) {
-        const signature = key.sign(message).toString()
+    for (let key of keys) {
+        if (typeof key === 'string') {
+            key = PrivateKey.from(key)
+        }
+        const signature = hexify(key.sign(message.buffer))
         signatures.push(signature)
     }
 
