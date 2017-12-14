@@ -60,8 +60,8 @@ async function assertThrows(block: () => Promise<any>) {
 }
 
 describe('rpc auth', function() {
-    this.timeout(10 * 1000)
-    this.slow(5 * 1000)
+    this.timeout(20 * 1000)
+    this.slow(10 * 1000)
 
     let testAccount: {username: string, password: string}
     let testKey: string
