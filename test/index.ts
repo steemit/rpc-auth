@@ -4,7 +4,7 @@ import {randomBytes} from 'crypto'
 import * as fetch from 'node-fetch'
 import {PrivateKey, Client, utils, Signature} from 'dsteem'
 
-import {sign, validate, JsonRpcRequest, VerifyMessage, SignedJsonRpcRequest} from './../src/'
+import {sign, validate, JsonRpcRequest, VerifyMessage, SignedJsonRpcRequest, hashMessage} from './../src/'
 
 const dummyVerify: VerifyMessage = async (message: Buffer, signatures: string[], account: string) => {}
 
@@ -255,6 +255,18 @@ describe('rpc auth', function() {
         assert.throws(() => {
             sign(req, testAccount.username, [testKey])
         })
+    })
+
+})
+
+describe('hashMessage', function() {
+
+    const expected = Buffer.from('04d1b962e951babf44b1bb161d9ba97aa526aa633bf31505c2ccb593a895ac42', 'hex')
+
+    it('creates correct message', function() {
+        const nonce = Buffer.from('29a0132f4b950adb', 'hex')
+        const hash = hashMessage('2018-01-15T12:34:56Z', 'foo', 'bar.baz', 'WyJxZXgiXQo=', nonce)
+        assert.deepEqual(hash, expected)
     })
 
 })

@@ -77,7 +77,7 @@ class ValidationError extends Error {
  *
  * @returns bytes to be signed or validated.
  */
-function hashMessage(timestamp: string, account: string, method: string,
+export function hashMessage(timestamp: string, account: string, method: string,
                      params: string, nonce: Buffer): Buffer {
     const first = createHash('sha256')
     first.update(timestamp)
