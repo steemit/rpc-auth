@@ -261,12 +261,12 @@ describe('rpc auth', function() {
 
 describe('hashMessage', function() {
 
-    const expected = Buffer.from('04d1b962e951babf44b1bb161d9ba97aa526aa633bf31505c2ccb593a895ac42', 'hex')
+    const expected = '04d1b962e951babf44b1bb161d9ba97aa526aa633bf31505c2ccb593a895ac42'
 
     it('creates correct message', function() {
         const nonce = Buffer.from('29a0132f4b950adb', 'hex')
         const hash = hashMessage('2018-01-15T12:34:56Z', 'foo', 'bar.baz', 'WyJxZXgiXQo=', nonce)
-        assert.deepEqual(hash, expected)
+        assert.equal(hash.toString('hex'), expected)
     })
 
 })
