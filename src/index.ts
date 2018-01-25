@@ -66,6 +66,11 @@ class ValidationError extends Error {
 
 }
 
+function bufferToBits(b: Buffer) {
+    const ab = b.buffer.slice(b.byteOffset, b.byteOffset + b.byteLength)
+    return sjcl.codec.arrayBuffer.toBits(ab)
+}
+
 /**
  * Create request hash to be signed.
  *
@@ -86,9 +91,9 @@ export function hashMessage(timestamp: string, account: string, method: string,
     first.update(params)
 
     const second = new sjcl.hash.sha256()
-    second.update(sjcl.codec.arrayBuffer.toBits(K.buffer))
+    second.update(bufferToBits(K))
     second.update(first.finalize())
-    second.update(sjcl.codec.arrayBuffer.toBits(nonce.buffer))
+    second.update(bufferToBits(nonce))
 
     return Buffer.from(sjcl.codec.arrayBuffer.fromBits(second.finalize()))
 }
