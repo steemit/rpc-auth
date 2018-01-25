@@ -3,8 +3,8 @@
  * @author Johan Nordberg <johan@steemit.com>
  */
 
-import {hexify, PrivateKey} from '@steemit/libcrypto'
-import {createHash, randomBytes} from 'crypto'
+import {hexify, PrivateKey, sjcl} from '@steemit/libcrypto'
+import {randomBytes} from 'crypto'
 
 /**
  * Signing constant used to reserve opcode space and prevent cross-protocol attacks.
@@ -79,18 +79,18 @@ class ValidationError extends Error {
  */
 export function hashMessage(timestamp: string, account: string, method: string,
                      params: string, nonce: Buffer): Buffer {
-    const first = createHash('sha256')
+    const first = new sjcl.hash.sha256()
     first.update(timestamp)
     first.update(account)
     first.update(method)
     first.update(params)
 
-    const second = createHash('sha256')
-    second.update(K)
-    second.update(first.digest())
-    second.update(nonce)
+    const second = new sjcl.hash.sha256()
+    second.update(sjcl.codec.arrayBuffer.toBits(K.buffer))
+    second.update(first.finalize())
+    second.update(sjcl.codec.arrayBuffer.toBits(nonce.buffer))
 
-    return second.digest()
+    return Buffer.from(sjcl.codec.arrayBuffer.fromBits(second.finalize()))
 }
 
 /**
