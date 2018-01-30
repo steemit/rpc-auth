@@ -23,6 +23,7 @@
     "@types/node": "^9.3.0",
     "dsteem": "^0.8.5",
     "mocha": "^5.0.0",
+    "mocha-junit-reporter": "^1.16.0",
     "node-fetch": "^1.7.3",
     "nsp": "^3.1.0",
     "nyc": "^11.4.1",
