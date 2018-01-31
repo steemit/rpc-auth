@@ -18,6 +18,8 @@ Request signing for [JSON-RPC 2.0](http://www.jsonrpc.org/specification) impleme
     * Result: Signature/auth must be in message body
 * Signed requests do not violate json-rpc spec.
     * Result: Extensions must go into `params`.
+* Method name is not obscured.
+    * `method` is unchanged by signing.
 
 ### Signed request
 
