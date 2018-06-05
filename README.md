@@ -12,6 +12,15 @@ Specification
 
 Request signing for [JSON-RPC 2.0](http://www.jsonrpc.org/specification) implemented using [steem](https://steem.io) authorities.
 
+### Design Goals
+
+* Do not require request header modification.
+    * Result: Signature/auth must be in message body
+* Signed requests do not violate json-rpc spec.
+    * Result: Extensions must go into `params`.
+* Method name is not obscured so that it may be routed properly to the correct handler/backend.
+    * Result: `method` remains unchanged by signing.
+
 ### Signed request
 
 Requests are signed with steem keys belonging to the sender.
