@@ -3,8 +3,8 @@
  * @author Johan Nordberg <johan@steemit.com>
  */
 
-import {hexify, PrivateKey} from '@steemit/libcrypto'
-import {createHash, randomBytes} from 'crypto'
+import {hexify, PrivateKey, sjcl} from '@steemit/libcrypto'
+import {randomBytes} from 'crypto'
 
 /**
  * Signing constant used to reserve opcode space and prevent cross-protocol attacks.
@@ -66,6 +66,11 @@ class ValidationError extends Error {
 
 }
 
+function bufferToBits(b: Buffer) {
+    const ab = b.buffer.slice(b.byteOffset, b.byteOffset + b.byteLength)
+    return sjcl.codec.arrayBuffer.toBits(ab)
+}
+
 /**
  * Create request hash to be signed.
  *
@@ -77,20 +82,20 @@ class ValidationError extends Error {
  *
  * @returns bytes to be signed or validated.
  */
-function hashMessage(timestamp: string, account: string, method: string,
+export function hashMessage(timestamp: string, account: string, method: string,
                      params: string, nonce: Buffer): Buffer {
-    const first = createHash('sha256')
+    const first = new sjcl.hash.sha256()
     first.update(timestamp)
     first.update(account)
     first.update(method)
     first.update(params)
 
-    const second = createHash('sha256')
-    second.update(K)
-    second.update(first.digest())
-    second.update(nonce)
+    const second = new sjcl.hash.sha256()
+    second.update(bufferToBits(K))
+    second.update(first.finalize())
+    second.update(bufferToBits(nonce))
 
-    return second.digest()
+    return Buffer.from(sjcl.codec.arrayBuffer.fromBits(second.finalize()))
 }
 
 /**
