@@ -2,6 +2,18 @@
 # yarn lockfile v1
 
 
+"@steemit/dsteem@^0.10.1":
+  version "0.10.1"
+  resolved "https://registry.yarnpkg.com/@steemit/dsteem/-/dsteem-0.10.1.tgz#2215a9a98e862db6212044d1f2b30631f62ded74"
+  dependencies:
+    bs58 "^4.0.1"
+    bytebuffer "^5.0.1"
+    core-js "^2.5.0"
+    node-fetch "^2.1.2"
+    secp256k1 "^3.3.1"
+    verror "^1.10.0"
+    whatwg-fetch "^2.0.3"
+
 "@steemit/libcrypto@^1.0.1":
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/@steemit/libcrypto/-/libcrypto-1.0.1.tgz#c31ab3e5deb667628169b3d54d746b015de31a79"
@@ -494,18 +506,6 @@ drbg.js@^1.0.1:
     browserify-aes "^1.0.6"
     create-hash "^1.1.2"
     create-hmac "^1.1.4"
-
-dsteem@^0.10.1:
-  version "0.10.1"
-  resolved "https://registry.yarnpkg.com/dsteem/-/dsteem-0.10.1.tgz#1921d9f662f138c0b52f8fa77c7abc37ceab42f4"
-  dependencies:
-    bs58 "^4.0.1"
-    bytebuffer "^5.0.1"
-    core-js "^2.5.0"
-    node-fetch "^2.1.2"
-    secp256k1 "^3.3.1"
-    verror "^1.10.0"
-    whatwg-fetch "^2.0.3"
 
 elliptic@^6.2.3:
   version "6.4.0"
