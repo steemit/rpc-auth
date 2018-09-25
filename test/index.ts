@@ -2,7 +2,7 @@ import 'mocha'
 import * as assert from 'assert'
 import {randomBytes} from 'crypto'
 import * as fetch from 'node-fetch'
-import {PrivateKey, Client, utils, Signature} from '@steemit/dsteem'
+import {PrivateKey, Client, utils, Signature} from 'dsteem'
 
 import {sign, validate, JsonRpcRequest, VerifyMessage, SignedJsonRpcRequest} from './../src/'
 
