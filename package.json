@@ -1,7 +1,7 @@
 {
   "name": "@steemit/rpc-auth",
   "description": "JSON-RPC 2.0 authentication using steem blockchain authorities",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "license": "MIT",
   "main": "./lib/index",
   "typings": "./lib/index",
@@ -21,7 +21,7 @@
   "devDependencies": {
     "@types/mocha": "^2.2.47",
     "@types/node": "^9.3.0",
-    "dsteem": "^0.8.5",
+    "dsteem": "^0.10.1",
     "mocha": "^5.0.0",
     "mocha-junit-reporter": "^1.16.0",
     "node-fetch": "^1.7.3",

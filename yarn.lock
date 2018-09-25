@@ -495,14 +495,14 @@ drbg.js@^1.0.1:
     create-hash "^1.1.2"
     create-hmac "^1.1.4"
 
-dsteem@^0.8.5:
-  version "0.8.6"
-  resolved "https://registry.yarnpkg.com/dsteem/-/dsteem-0.8.6.tgz#6f11333903537503267441e842ae92117beadcc0"
+dsteem@^0.10.1:
+  version "0.10.1"
+  resolved "https://registry.yarnpkg.com/dsteem/-/dsteem-0.10.1.tgz#1921d9f662f138c0b52f8fa77c7abc37ceab42f4"
   dependencies:
     bs58 "^4.0.1"
     bytebuffer "^5.0.1"
     core-js "^2.5.0"
-    node-fetch "^2.0.0-alpha.9"
+    node-fetch "^2.1.2"
     secp256k1 "^3.3.1"
     verror "^1.10.0"
     whatwg-fetch "^2.0.3"
@@ -1211,9 +1211,9 @@ node-fetch@^1.7.3:
     encoding "^0.1.11"
     is-stream "^1.0.1"
 
-node-fetch@^2.0.0-alpha.9:
-  version "2.0.0-alpha.9"
-  resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-2.0.0-alpha.9.tgz#990c0634f510f76449a0d6f6eaec96b22f273628"
+node-fetch@^2.1.2:
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-2.2.0.tgz#4ee79bde909262f9775f731e3656d0db55ced5b5"
 
 nodesecurity-npm-utils@^6.0.0:
   version "6.0.0"
